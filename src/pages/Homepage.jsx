@@ -1,52 +1,77 @@
-import React, {useEffect, useState} from 'react'
-import axios from 'axios'
-import { FaArrowRight } from "react-icons/fa"
-import { FaArrowLeftLong } from "react-icons/fa6"
+;import { FaArrowRight } from "react-icons/fa";
+import { FaArrowLeftLong } from "react-icons/fa6";
+import { useSeasonalAnime } from "../hooks/useSeasonalAnime";
 
 export default function Homepage() {
-  const [seasonalAnime, setSeasonalAnime] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-  const [page, setPage] = useState(1)
-
-  useEffect(() => {
-    const fetchSeasonalAnime = async () => {
-      try {
-        const response = await axios.get(`https://api.jikan.moe/v4/seasons/now?page=${page}`)
-        setSeasonalAnime(response.data.data) /* .data.data = array of anime */
-        setLoading(false)
-      } catch (err) {
-        console.error('Failed to fetch seasonal anime:', err)
-        setError('Something went wrong while fetching data.')
-        setLoading(false)
-      }
-    }
-
-    fetchSeasonalAnime()
-  }, [])
+  const seasonal = useSeasonalAnime();
 
   return (
-    <div className="pt-30 px-4 ">
-      <h1>Seasonal Anime</h1>
+    <div className="pt-35 px-4">
+      <p className="text-lg font-bold flex">Seasonal Anime</p>
 
-      {loading && <p>Loading anime...</p>}
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {seasonal.loading && <p>Loading anime...</p>}
+      {seasonal.error && <p style={{ color: "red" }}>{error}</p>}
 
-      <div className="overflow-hidden">
-        <ul className="flex space-x-4">
-          {seasonalAnime.map((anime) => (
-            <li key={anime.mal_id} className="min-w-[200px] p-4 rounded">
-              <p>{anime.title}</p>
+      <div>
+        <ul
+          className="flex gap-4 mt-5 overflow-hidden scroll-smooth"
+          ref={seasonal.sliderRef}
+        >
+          {seasonal.seasonalAnime.map((anime) => (
+            <li
+              key={anime.mal_id}
+              className="min-w-[220px] p-2 rounded flex flex-col mr-[0] items-center bg-[#393939]"
+            >
+              <p className="w-[200px] h-[30px] text-sm overflow-hidden whitespace-nowrap text-ellipsis text-center">
+                {anime.title_english ? anime.title_english : anime.title}
+              </p>
+              <img
+                src={anime.images.jpg.image_url}
+                alt="Seasonal anime image"
+                className="w-[200px] h-[300px] object-cover rounded"
+              />
             </li>
           ))}
         </ul>
       </div>
-          
-      <div className="flex justify-center items-center mt-6 gap-4">
-        <button><FaArrowLeftLong /></button>
-        <p>Page {page}</p>
-        <button><FaArrowRight /></button>
+
+      <div className="flex justify-center items-center mt-2 gap-4">
+        <button onClick={seasonal.handlePrev}>
+          <FaArrowLeftLong />
+        </button>
+        <button onClick={seasonal.handleNext}>
+          <FaArrowRight />
+        </button>
       </div>
+{/* 
+      <div>
+        <ul className="flex gap-4 mt-5 overflow-hidden scroll-smooth">
+          {seasonalAnime.map((anime) => (
+            <li
+              key={anime.mal_id}
+              className="min-w-[220px] p-2 rounded flex flex-col mr-[0] items-center bg-[#393939]"
+            >
+              <p className="w-[200px] h-[30px] text-sm overflow-hidden whitespace-nowrap text-ellipsis text-center">
+                {anime.title_english ? anime.title_english : anime.title}
+              </p>
+              <img
+                src={anime.images.jpg.image_url}
+                alt="Seasonal anime image"
+                className="w-[200px] h-[300px] object-cover rounded"
+              />
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <div className="flex justify-center items-center mt-2 gap-4">
+        <button onClick={handlePrev}>
+          <FaArrowLeftLong />
+        </button>
+        <button onClick={handleNext}>
+          <FaArrowRight />
+        </button>
+      </div> */}
     </div>
-  )
+  );
 }
