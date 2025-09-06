@@ -26,13 +26,13 @@ export function useSeasonalAnime() {
 
     const handlePrev = () => {
         if (sliderRef.current) {
-            sliderRef.current.scrollLeft -= itemWidth;
+            sliderRef.current.scrollLeft -= itemWidth
         }
     }
 
     const handleNext = () => {
         if (sliderRef.current) {
-            sliderRef.current.scrollLeft += itemWidth;
+            sliderRef.current.scrollLeft += itemWidth
         }
     }
 

@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom'
 
 export default function NavBar() {
   return (
-    <header className="fixed left-0 w-full top-0 px-6 py-4 bg-gray-900 text-white">
+    <header className="absolute left-0 w-full top-0 px-6 py-4 bg-gray-900 text-white">
         <div className="flex justify-between items-center mb-2">
             <div className="font-[Artnoova] text-3xl font-semibold mb-2 text-left">
                 <NavLink to="/" className="!text-white" >Mitanime</NavLink>
