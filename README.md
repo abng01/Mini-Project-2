@@ -1,12 +1,58 @@
-# React + Vite
+📺 AnimeVault - Anime Tracker App 
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A simple and stylish anime web application built with React, React Router, and Tailwind CSS, powered by the Jikan API. The app allows users to log in, view random anime data, and sets the foundation for more advanced features like anime tracking, search, and personalized watchlists.
 
-Currently, two official plugins are available:
+🚀 Features
+__________________________________
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+🔐 User Authentication – Basic login and logout functionality
 
-## Expanding the ESLint configuration
+📡 API Integration – Fetches data from the Jikan API, a public REST API for MyAnimeList
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+🎨 Responsive Design – Styled with Tailwind CSS for a clean and modern UI
+
+⚛️ Routing – Client-side routing with react-router-dom
+
+
+🛠️ Built With
+__________________________________
+
+React
+
+React Router DOM
+
+Tailwind CSS
+
+Jikan API
+
+
+📈 Planned Features
+__________________________________
+
+This app is still in early development and has a lot of potential. Here are some features planned for future versions:
+
+✅ Anime Tracker Page
+
+      Track watched anime
+
+      Take notes or leave progress markers
+
+      Optional checklist that generates boxes based on the episode count
+
+🔍 Search & Filter
+
+      Full anime search functionality
+
+      Advanced filters (e.g., by genre, rating, year, etc.)
+
+      Pagination for results
+
+📋 User Watchlist
+
+      Create a personalized list of favorite or planned-to-watch anime
+
+      Mark episodes as watched
+
+💬 Notes System
+
+      Users can write notes on each anime for quick reference
