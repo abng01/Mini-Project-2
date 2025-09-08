@@ -2,10 +2,15 @@ import { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 
 export default function useHomeAnime() {
-    const [data, setData] = useState({top: [], seasonal: []})
+    const [data, setData] = useState({top: [], seasonal: [], popular: []})
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
-    const sliderRef = useRef(null)
+   
+    const seasonalRef = useRef(null)
+    const topRef = useRef(null)
+    const popularRef = useRef(null)
+    // const randomRef = useRef(null)
+
     const itemWidth = 550
     const hasFetched = useRef(false)
 
@@ -15,24 +20,33 @@ export default function useHomeAnime() {
 
         const cachedTop = JSON.parse(localStorage.getItem('topAnime') || 'null')
         const cachedSeasonal = JSON.parse(localStorage.getItem('seasonalAnime') || 'null')
+        const cachedPopular = JSON.parse(localStorage.getItem('popularAnime') || 'null')
+        // const cachedRandom = JSON.parse(localStorage.getItem('randomAnime') || 'null')
 
-        if (cachedTop && cachedSeasonal) {
-            setData({ top: cachedTop, seasonal: cachedSeasonal })
+        if (cachedTop && cachedSeasonal && cachedPopular) {
+            setData({ top: cachedTop, seasonal: cachedSeasonal, popular: cachedPopular})
             setLoading(false)
             return
         }
 
         const fetchData = async () => {
             try {
-                const [topRes, seasonalRes] = await Promise.all([
+                const [topRes, seasonalRes, popularRes] = await Promise.all([
                     axios.get('https://api.jikan.moe/v4/top/anime'),
-                    axios.get('https://api.jikan.moe/v4/seasons/now')
+                    axios.get('https://api.jikan.moe/v4/seasons/now'),
+                    axios.get('https://api.jikan.moe/v4/watch/promos/popular')
                 ])
 
-                setData({ top: topRes.data.data, seasonal: seasonalRes.data.data })
+                setData({ 
+                    top: topRes.data.data, 
+                    seasonal: seasonalRes.data.data, 
+                    popular: popularRes.data.data
+                })
 
                 localStorage.setItem('topAnime', JSON.stringify(topRes.data.data))
                 localStorage.setItem('seasonalAnime', JSON.stringify(seasonalRes.data.data))
+                localStorage.setItem('popularAnime', JSON.stringify(popularRes.data.data))
+                // localStorage.setItem('randomAnime', JSON.stringify([randomRes.data.data]))
             } catch (err) {
                 if (err.response?.status === 429) {
                     console.warn('Too many requests. Retrying in 5 seconds...')
@@ -50,24 +64,38 @@ export default function useHomeAnime() {
         fetchData()
     }, [])
 
-    const handlePrev = () => {
-        if (sliderRef.current) {
-            sliderRef.current.scrollLeft -= itemWidth
+    const scrollLeft = (ref) => {
+        if (ref.current) {
+            ref.current.scrollLeft -= itemWidth
         }
     }
 
-    const handleNext = () => {
-        if (sliderRef.current) {
-            sliderRef.current.scrollLeft += itemWidth
+    const scrollRight = (ref) => {
+        if (ref.current) {
+            ref.current.scrollLeft += itemWidth
         }        
     }
 
     return {
-        data,
         loading,
         error,
-        sliderRef,
-        handleNext,
-        handlePrev
+        seasonal: {
+            data: data.seasonal,
+            ref: seasonalRef,
+            handleNext: () => scrollRight(seasonalRef),
+            handlePrev: () => scrollLeft(seasonalRef)
+        },
+        top: {
+            data: data.top,
+            ref: topRef,
+            handleNext: () => scrollRight(topRef),
+            handlePrev: () => scrollLeft(topRef)            
+        },
+        popular: {
+            data: data.popular,
+            ref: popularRef,
+            handleNext: () => scrollRight(popularRef),
+            handlePrev: () => scrollLeft(popularRef)              
+        }
     }
 }
